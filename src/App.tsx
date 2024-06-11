@@ -18,8 +18,8 @@ const PIPE_SPEED = 8;
 const PIPE_WIDTH = 52;
 
 // Responsively update size of game window based on screen size
-const WALL_HEIGHT = window.innerHeight < 600 ? window.innerHeight - 25 : 600;
-const WALL_WIDTH = window.innerWidth < 400 ? window.innerWidth - 20 : 400;
+const WALL_HEIGHT = window.innerHeight < 750 ? window.innerHeight - 25 : 750;
+const WALL_WIDTH = window.innerWidth < 550 ? window.innerWidth - 20 : 550;
 
 function App() {
   const [isWaiting, setIsWaiting] = useState(true);
@@ -139,7 +139,7 @@ function App() {
       }}
     />
   ) : (
-    <Home onClick={flap}>
+    <Home onClick={!isGameOver ? flap : () => {}}>
       <ScorePanel score={score} highScore={highScore} />
       <Background height={WALL_HEIGHT} width={WALL_WIDTH}>
         {!isStarted && !isWaiting ? (
@@ -147,7 +147,12 @@ function App() {
             <StartPanel wallWidth={WALL_WIDTH}>
               <span>Game Over!</span>
               <span style={{ marginBottom: 10 }}>Score: {score}</span>
-              <TryAgainButton onTryAgain={flap} />
+              <TryAgainButton
+                onTryAgain={() => {
+                  setIsGameOver(false);
+                  flap();
+                }}
+              />
             </StartPanel>
           ) : isViewingInstructions ? (
             <StartPanel wallWidth={WALL_WIDTH}>
